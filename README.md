@@ -4,3 +4,6 @@ Notice that, **the comminication between stm32f407 and COM port in the PC is pro
 
 The designed application using MATLAB GUI shows the x, y and z axis variable in real time graph and text. Also, the available COM port can be chosen using popup menu upper left-hand corner. Then the comminication is started if the COM port is available.
 
+![ispat](https://github.com/yasinsulhan/stm32f4-USART-receiving-transmitting-string-data/assets/109728194/a49d9c2f-edc6-4109-a7df-0ab157a78e4e)
+
+
