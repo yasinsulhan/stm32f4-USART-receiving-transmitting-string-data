@@ -1,8 +1,23 @@
-In this project, the data comimg from lis302 dl accelerometer sensor is transmitted from stm32f407 to computer via USB-TLL by using USART comminication protocol. Reading data from lis302 dl by using stm32f407 is explained [here](https://github.com/yasinsulhan/stm32f4-USART-receiving-transmitting-string-data). The SPI comminication protocol is used. So, in this project SPI and USART is used together. Also, you can check [SPI project tutorial](https://github.com/yasinsulhan/SPI-stm32f4-between-lis302dl). 
+USART with register was explained [before](https://github.com/yasinsulhan/stm32f4-usart-with-register). In this project, the string data is received and transmitted. Actually this project is similar with the other USART project. The only difference is receiving the string data. To do this, a character buffer is generated. The data that is as character coming from shift register to DR register is stored in the buffer. The process is repeated untill the buffer is filled with the characters contituting of the string. The codeblock doing this process is given below.
 
-Notice that, **the comminication between stm32f407 and COM port in the PC is provided via USART. The comminication between stm32f407 and lis302 dl sensor is provided via SPI to do reading and writing process.** 
+```
+void assign_the_data(char *buffer)
+{
+    char* ptr;
+    ptr = &buffer[0];
 
-The designed application using MATLAB GUI shows the x, y and z axis variable in real time graph and text. Also, the available COM port can be chosen using popup menu upper left-hand corner. Then the comminication is started if the COM port is available.
+    for(int i=0; i<20; i++)
+    {
+    	while (!(USART2->SR & (1<<5)));
+        *(ptr+i) = USART2->DR;
+
+        if(*(ptr+i) == '\n')
+        	return;
+    }
+}
+```
+
+In a nutshell, the function takes the buffer array parameter which is created as global variable. The pointer created in inside of the function points the starting of buffer. Then it stores the the characters coming from shift register to the DR register. If the last data is ```'\n'``` which proves the pointer is at the end of the string received. Function is ended properly and the buffer is keept the the data permenantly to use in the condition when the data is received. According to condition, the needed led is lighed up by comparing each character of the buffer in the conditions.
 
 ![ispat](https://github.com/yasinsulhan/stm32f4-USART-receiving-transmitting-string-data/assets/109728194/a49d9c2f-edc6-4109-a7df-0ab157a78e4e)
 
